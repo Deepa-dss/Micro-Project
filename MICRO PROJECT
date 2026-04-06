@@ -1,0 +1,114 @@
+import json
+
+# LOAD DATA
+try:
+    with open("students.json", "r") as file:
+        students = json.load(file)
+except:
+    students = {}
+
+# SAVE FUNCTION
+def save_data():
+    with open("students.json", "w") as file:
+        json.dump(students, file, indent=4)
+
+while True:
+    print("\n===== STUDENT MANAGEMENT SYSTEM =====")
+    print("1. Add Student")
+    print("2. Display Students")
+    print("3. Search Student")
+    print("4. Update Student")
+    print("5. Delete Student")
+    print("6. Exit")
+
+    choice = input("Enter choice (1-6): ")
+
+    # ADD STUDENT
+    if choice == "1":
+        roll = input("Enter Roll Number: ")
+
+        if roll in students:
+            print("Student already exists!")
+            continue
+
+        name = input("Enter Name: ")
+
+        try:
+            age = int(input("Enter Age: "))
+            marks = float(input("Enter Marks: "))
+        except:
+            print("Invalid input!")
+            continue
+
+        students[roll] = {
+            "name": name,
+            "age": age,
+            "marks": marks
+        }
+
+        save_data()
+        print("Student added successfully!")
+
+    # DISPLAY
+    elif choice == "2":
+        if not students:
+            print("No records found")
+        else:
+            print("\n--- Student Records ---")
+            for roll, data in students.items():
+                print(f"Roll: {roll} | Name: {data['name']} | Age: {data['age']} | Marks: {data['marks']}")
+
+    # SEARCH
+    elif choice == "3":
+        roll = input("Enter Roll Number: ")
+
+        if roll in students:
+            data = students[roll]
+            print(f"Found -> {roll} | {data['name']} | {data['age']} | {data['marks']}")
+        else:
+            print("Student not found")
+
+    # UPDATE
+    elif choice == "4":
+        roll = input("Enter Roll Number: ")
+
+        if roll in students:
+            name = input("Enter New Name: ")
+
+            try:
+                age = int(input("Enter New Age: "))
+                marks = float(input("Enter New Marks: "))
+            except:
+                print("Invalid input!")
+                continue
+
+            students[roll] = {
+                "name": name,
+                "age": age,
+                "marks": marks
+            }
+
+            save_data()
+            print("Student updated!")
+
+        else:
+            print("Student not found")
+
+    # DELETE
+    elif choice == "5":
+        roll = input("Enter Roll Number to delete: ")
+
+        if roll in students:
+            del students[roll]
+            save_data()
+            print("Student deleted!")
+        else:
+            print("Student not found")
+
+    # EXIT
+    elif choice == "6":
+        print("Program exited")
+        break
+
+    else:
+        print("Invalid choice! Enter 1-6")
